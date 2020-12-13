@@ -5,6 +5,8 @@ Author: Ng Wei Han
 """
 
 from selenium import webdriver
+from file_operation import FileOperation
+import time
 
 class WhatsAppAutomation:
     def __init__(self):
@@ -42,7 +44,6 @@ class WhatsAppAutomation:
         """
         self.msg_box.send_keys(message)
         self.driver.find_element_by_class_name("_2Ujuu").click() # Press send button
-        print("Message sent correctly")
 
     def search_user_box(self):
         inp_xpath = '//div[@class="_1awRl copyable-text selectable-text"][@contenteditable="true"][@data-tab="3"]'
@@ -52,9 +53,14 @@ class WhatsAppAutomation:
         self.search_box.send_keys(name)
         self.user = self.driver.find_element_by_xpath('//span[@class="_1hI5g _1XH7x _1VzZY"][@title = "{}"]'.format(name))
         self.user.click()
-        print("Found user")
+        print("Found {}".format(name))
 
-contacts = ["Wan fang", "Jia Hui", "Ann Drea", "WhatsApp Bot"]
+    def search_again(self):
+        self.driver.find_element_by_class_name("_3Eocp").click()  # Press cancel button
+
+file_reader = FileOperation("test_contacts.csv")
+
+contacts = file_reader.get_column(0)
 
 test = WhatsAppAutomation()
 test.navigate()
@@ -63,9 +69,16 @@ for name in contacts:
     try:
         test.search_user(name)
     except:
-        print("User not found")
-        input()
+        print("{} not found".format(name))
+        while True:
+            try:
+                test.search_again()
+            except:
+                time.sleep(1)
+                continue
+            else:
+                break
         continue
 
     test.find_msg_box()
-    test.send_message("Hi {}, IU is the best!".format(name))
+    test.send_message("Hi {}, please ignore this LMAO SRY FOR SPAMMING HAHAHAH THIS IS AUTOMATED".format(name))
