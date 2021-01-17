@@ -9,9 +9,10 @@ from typing import List
 class FileOperation:
     def __init__(self,file_name):
         if ".csv" in file_name:
-            self.df = pd.read_csv(file_name)
-        elif ".xlsx" in file_name:
-            self.df = pd.read_csv(file_name)
+            try:
+                self.df = pd.read_csv(file_name)
+            except:
+                raise ValueError("Please enter correct file name.")
         else:
             raise ValueError("Only .csv and .xlsx file formats are accepted.")
 

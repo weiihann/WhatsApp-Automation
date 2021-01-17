@@ -5,8 +5,6 @@ Author: Ng Wei Han
 """
 
 from selenium import webdriver
-from file_operation import FileOperation
-import time
 
 class WhatsAppAutomation:
     def __init__(self):
@@ -57,28 +55,3 @@ class WhatsAppAutomation:
 
     def search_again(self):
         self.driver.find_element_by_class_name("_3Eocp").click()  # Press cancel button
-
-file_reader = FileOperation("test_contacts.csv")
-
-contacts = file_reader.get_column(0)
-
-test = WhatsAppAutomation()
-test.navigate()
-test.search_user_box()
-for name in contacts:
-    try:
-        test.search_user(name)
-    except:
-        print("{} not found".format(name))
-        while True:
-            try:
-                test.search_again()
-            except:
-                time.sleep(1)
-                continue
-            else:
-                break
-        continue
-
-    test.find_msg_box()
-    test.send_message("Hi {}, please ignore this LMAO SRY FOR SPAMMING HAHAHAH THIS IS AUTOMATED".format(name))
